@@ -19,4 +19,4 @@ const EntrySchema = mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model('Entries', EntrySchema);
+module.exports = mongoose.model('entries', EntrySchema);
