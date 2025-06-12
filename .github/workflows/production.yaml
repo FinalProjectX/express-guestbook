@@ -26,3 +26,6 @@ jobs:
 
       - name: Deploy Project Artifacts
         run: vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: Deployment Succeeded Message
+        run: echo "✅ Deployment to Vercel Production environment was successful! 🚀"
