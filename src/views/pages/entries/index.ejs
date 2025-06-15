@@ -8,54 +8,71 @@
       content="A Node.js web application that allows visitors to leave a public comment without creating a user account."
     />
     <title>Entries - Express Guestbook</title>
-    <link rel="shortcut icon" href="favicon.png" type="image/x-icon" />
-    <link rel="stylesheet" href="css/bootstrap.min.css" />
+    <link rel="shortcut icon" href="/favicon.png" type="image/x-icon" />
+    <link rel="stylesheet" href="/css/bootstrap.min.css" />
   </head>
   <body>
     <%- include('../../partials/header'); -%>
 
     <main>
-      <div class="container col-md-6">
-        <% if (entries.length) { %> <% entries.forEach(entry => { %>
+      <div class="container col-md-6 mt-4">
+        <!-- Search Bar -->
+        <form action="/entries/search" method="GET" class="d-flex mb-4">
+          <input
+            type="text"
+            name="keyword"
+            class="form-control me-2"
+            placeholder="Cari komentar atau nama..."
+            value="<%= keyword || '' %>"
+            required
+          />
+          <button type="submit" class="btn btn-outline-primary">Cari</button>
+        </form>
 
-        <div class="card shadow-sm rounded mb-4" tabindex="0">
-          <div class="card-header"><%= entry.createdAt %></div>
-          <div class="card-body">
-            <blockquote class="blockquote mb-0">
-              <p><%= entry.comment %></p>
-              <footer class="blockquote-footer"><%= entry.name %></footer>
-            </blockquote>
-          </div>
-        </div>
+        <% if (keyword) { %>
+          <p>Menampilkan hasil pencarian untuk: "<strong><%= keyword %></strong>"</p>
+        <% } %>
 
-        <% }) %> <% } else { %>
-
-        <div class="container col-md-6">
+        <% if (entries.length) { %>
+          <% entries.forEach(entry => { %>
+            <div class="card shadow-sm rounded mb-4" tabindex="0">
+              <div class="card-header"><%= entry.createdAt %></div>
+              <div class="card-body">
+                <blockquote class="blockquote mb-0">
+                  <p><%= entry.comment %></p>
+                  <footer class="blockquote-footer"><%= entry.name %></footer>
+                </blockquote>
+              </div>
+            </div>
+          <% }) %>
+        <% } else { %>
           <div class="card shadow-sm rounded text-center">
             <div class="card-body">
               <% if (error) { %>
-              <h4>Something went wrong! <a href="/entries">Reload</a></h4>
+                <h4>Something went wrong! <a href="/entries">Reload</a></h4>
+              <% } else if (keyword) { %>
+                <h4>Tidak ditemukan entri untuk "<%= keyword %>"</h4>
               <% } else { %>
-              <h4>No entries found! <a href="/entries/new">Add one</a></h4>
+                <h4>No entries found! <a href="/entries/new">Add one</a></h4>
               <% } %>
             </div>
           </div>
-        </div>
-
         <% } %>
       </div>
     </main>
 
     <%- include('../../partials/footer'); -%>
 
-    <script src="js/bootstrap.bundle.min.js"></script>
+    <script src="/js/bootstrap.bundle.min.js"></script>
     <script>
       const footer = document.getElementById('footer');
-      footer.classList.remove('fixed-bottom');
+      if (footer) footer.classList.remove('fixed-bottom');
 
       const navLink = document.getElementById('entries-page');
-      navLink.classList.add('active');
-      navLink.setAttribute('aria-current', 'page');
+      if (navLink) {
+        navLink.classList.add('active');
+        navLink.setAttribute('aria-current', 'page');
+      }
     </script>
   </body>
 </html>
